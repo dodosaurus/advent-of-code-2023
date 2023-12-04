@@ -1,6 +1,7 @@
 let fs = require("fs");
 let games = fs.readFileSync("2/input.txt").toString().split("\n");
 let final_sum = 0;
+let final_power = 0;
 
 const game_to_compare = {
   blue: 14,
@@ -61,6 +62,10 @@ games.forEach((one_game) => {
   ) {
     final_sum = final_sum + game_number;
   }
+
+  game_power = highest.blue * highest.green * highest.red
+  final_power = final_power + game_power
 });
 
-console.log("Vysledok: " + final_sum);
+console.log("Vysledok 1: " + final_sum);
+console.log("Vysledok 2: " + final_power);
