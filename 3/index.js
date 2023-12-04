@@ -11,9 +11,10 @@ let fs = require("fs");
 let rows = fs.readFileSync("3/input.txt").toString().split("\n");
 
 const one_row_length = 140;
-const symbols = ["*", "-", "#", "/", "=", "%", "$", "&", "@", "+"];
+const symbols = ["*"];
 
 let coordinates_with_nums = [];
+let final_sum = 0
 
 //wrappers
 const noteLocationOfNum = (column, row) => {
@@ -69,7 +70,7 @@ const lookForWholeNumberInRow = (index_of_number, row_array, row_index) => {
 
   console.log(`To right: ${pasteToRight}`);
 
-  finalNumber = parseInt(pasteToLeft + finalNumber + pasteToRight);
+  finalNumber = pasteToLeft + finalNumber + pasteToRight
 
   // if (!result_array_of_parts.includes(finalNumber)) {
   //   result_array_of_parts.push(finalNumber);
@@ -77,7 +78,6 @@ const lookForWholeNumberInRow = (index_of_number, row_array, row_index) => {
 
   result_array_of_parts.push(finalNumber);
 
-  console.log(result_array_of_parts);
 };
 
 let two_dims = [];
@@ -102,14 +102,18 @@ rows.map((row) => {
 for (let i = 0; i <= two_dims.length - 1; i++) {
   console.log("Riadok cislo " + i);
   //symbol finder
+
   for (let j = 0; j <= two_dims[i].length - 1; j++) {
     if (symbols.includes(two_dims[i][j])) {
       console.log(`Symbol found on row index ${i} and on column index ${j}`);
+
+      let gear_counter = 0
 
       //right
       if (charIsNumber(two_dims[i][j + 1])) {
         console.log("Number found right of symbol.");
         if (!isAlreadyCheckedLocationOfNum(i, j + 1)) {
+          gear_counter++
           lookForWholeNumberInRow(j + 1, two_dims[i], i);
         }
       }
@@ -117,6 +121,7 @@ for (let i = 0; i <= two_dims.length - 1; i++) {
       if (charIsNumber(two_dims[i][j - 1])) {
         console.log("Number found left of symbol.");
         if (!isAlreadyCheckedLocationOfNum(i, j - 1)) {
+          gear_counter++
           lookForWholeNumberInRow(j - 1, two_dims[i], i);
         }
       }
@@ -127,6 +132,7 @@ for (let i = 0; i <= two_dims.length - 1; i++) {
         if (charIsNumber(two_dims[i + 1][j + 1])) {
           console.log("Number found right-down of symbol.");
           if (!isAlreadyCheckedLocationOfNum(i + 1, j + 1)) {
+            gear_counter++
             lookForWholeNumberInRow(j + 1, two_dims[i + 1], i + 1);
           }
         }
@@ -134,6 +140,7 @@ for (let i = 0; i <= two_dims.length - 1; i++) {
         if (charIsNumber(two_dims[i + 1][j])) {
           console.log("Number found down of symbol.");
           if (!isAlreadyCheckedLocationOfNum(i + 1, j)) {
+            gear_counter++
             lookForWholeNumberInRow(j, two_dims[i + 1], i + 1);
           }
         }
@@ -141,6 +148,7 @@ for (let i = 0; i <= two_dims.length - 1; i++) {
         if (charIsNumber(two_dims[i + 1][j - 1])) {
           console.log("Number found left-down of symbol.");
           if (!isAlreadyCheckedLocationOfNum(i + 1, j - 1)) {
+            gear_counter++
             lookForWholeNumberInRow(j - 1, two_dims[i + 1], i + 1);
           }
         }
@@ -152,6 +160,7 @@ for (let i = 0; i <= two_dims.length - 1; i++) {
         if (charIsNumber(two_dims[i - 1][j - 1])) {
           console.log("Number found left-up of symbol.");
           if (!isAlreadyCheckedLocationOfNum(i - 1, j - 1)) {
+            gear_counter++
             lookForWholeNumberInRow(j - 1, two_dims[i - 1], i - 1);
           }
         }
@@ -159,6 +168,7 @@ for (let i = 0; i <= two_dims.length - 1; i++) {
         if (charIsNumber(two_dims[i - 1][j])) {
           console.log("Number found up of symbol.");
           if (!isAlreadyCheckedLocationOfNum(i - 1, j)) {
+            gear_counter++
             lookForWholeNumberInRow(j, two_dims[i - 1], i - 1);
           }
         }
@@ -166,9 +176,16 @@ for (let i = 0; i <= two_dims.length - 1; i++) {
         if (charIsNumber(two_dims[i - 1][j + 1])) {
           console.log("Number found right-up of symbol.");
           if (!isAlreadyCheckedLocationOfNum(i - 1, j + 1)) {
+            gear_counter++
             lookForWholeNumberInRow(j + 1, two_dims[i - 1], i - 1);
           }
         }
+      }
+
+      if (gear_counter == 2) {
+        let first_num = parseInt(result_array_of_parts[result_array_of_parts.length - 1])
+        let second_num = parseInt(result_array_of_parts[result_array_of_parts.length - 2])
+        final_sum = final_sum + (first_num * second_num)
       }
     }
   }
@@ -176,9 +193,5 @@ for (let i = 0; i <= two_dims.length - 1; i++) {
 
 console.log(result_array_of_parts);
 
-let test = result_array_of_parts.filter(item => item === 851)
-console.log(test)
 
-sum = result_array_of_parts.reduce((partialSum, a) => partialSum + a, 0);
-
-console.log("Vysledok " + sum);
+console.log("Vysledok " + final_sum);
