@@ -5,29 +5,34 @@ var methods_1 = require("./methods");
 //processing file to object array
 var main = (0, methods_1.processTxt)("4/input.txt");
 //number to gather points
-var total_points = 0;
+// let total_points: number = 0;
 //test slicing
-// let temp: Card[] = main.slice(1, 2);
+// let temp: Card[] = main.slice(0, 10);
 var winning_nums_counter = 0;
-var card_points = 0;
 //main loop
-main.forEach(function (obj) {
+main.forEach(function (obj, index) {
     winning_nums_counter = 0;
-    card_points = 0;
-    obj.winning_numbers.forEach(function (win_num) {
-        obj.my_numbers.forEach(function (my_num) {
-            if (win_num == my_num) {
-                winning_nums_counter++;
-            }
+    //repeat per count of card
+    for (var x = 1; x <= obj.count; x++) {
+        //checking for winning numbers
+        obj.winning_numbers.forEach(function (win_num) {
+            obj.my_numbers.forEach(function (my_num) {
+                if (win_num == my_num) {
+                    winning_nums_counter++;
+                }
+            });
         });
-    });
-    if (winning_nums_counter === 0) {
-        card_points = 0;
+        var cap_for_count_iterator = main.length - 1 - index + winning_nums_counter;
+        for (var i = 0; i < cap_for_count_iterator; i++) {
+            main[index + i].count++;
+        }
     }
-    else {
-        card_points = Math.pow(2, winning_nums_counter - 1);
-    }
-    total_points = total_points + card_points;
+});
+//collect total number of cards
+var total_cards = 0;
+main.forEach(function (card) {
+    total_cards += card.count;
 });
 //result
-console.log(total_points);
+console.log(main[main.length - 1]);
+console.log(total_cards);
