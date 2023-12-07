@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx tsc 4/index.ts && node 4/index.js"
+    "dev": "npx tsc 5/index.ts && node 5/index.js"
   },
   "author": "",
   "license": "ISC",
